@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,8 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script dangerouslySetInnerHTML={{
+        <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+        <Script id="tailwind-config" strategy="beforeInteractive" dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
               theme: {

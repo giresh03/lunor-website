@@ -18,24 +18,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
-        <Script id="tailwind-config" strategy="beforeInteractive" dangerouslySetInnerHTML={{
-          __html: `
-            tailwind.config = {
-              theme: {
-                extend: {
-                  colors: {
-                    'neon-blue': '#00D4FF',
-                    'neon-purple': '#9D4EDD',
-                    'neon-cyan': '#00FFF5',
-                    'dark-bg': '#0A0A0F',
-                    'dark-surface': '#121218',
-                  }
-                }
-              }
-            }
-          `
-        }} />
         <style dangerouslySetInnerHTML={{
           __html: `
             * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -69,6 +51,24 @@ export default function RootLayout({
         }} />
       </head>
       <body className={`${inter.className} bg-dark-bg text-white antialiased`}>
+        <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+        <Script id="tailwind-config" strategy="beforeInteractive" dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    'neon-blue': '#00D4FF',
+                    'neon-purple': '#9D4EDD',
+                    'neon-cyan': '#00FFF5',
+                    'dark-bg': '#0A0A0F',
+                    'dark-surface': '#121218',
+                  }
+                }
+              }
+            }
+          `
+        }} />
         {children}
       </body>
     </html>

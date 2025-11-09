@@ -2,7 +2,7 @@
 
 import { motion, useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
-// Icons removed - not currently used in this simplified version
+import { ExternalLink, Github } from 'lucide-react'
 
 const categories = ['All', 'Web', 'Mobile', 'AI/ML', 'Student', 'Industrial']
 

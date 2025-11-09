@@ -1,8 +1,8 @@
 'use client'
 
 import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { Code, Smartphone, Brain, GraduationCap, Factory, Briefcase } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Code, Smartphone, Brain, GraduationCap, Factory, Briefcase, X } from 'lucide-react'
 
 const services = [
   {
@@ -58,6 +58,7 @@ const services = [
 export default function Services() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const [selectedService, setSelectedService] = useState<number | null>(null)
 
   return (
     <section id="services" className="relative py-20 md:py-32 overflow-hidden">

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Code, Smartphone, Brain, GraduationCap, Factory, Briefcase } from 'lucide-react'
 
 const services = [

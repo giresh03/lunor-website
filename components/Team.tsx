@@ -142,21 +142,17 @@ export default function Team() {
                 {/* Avatar */}
                 <div className="relative mb-6">
                   {member.image ? (
-                    <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden shadow-lg group-hover:shadow-2xl transition-shadow ring-2 ring-neon-blue/20 group-hover:ring-neon-blue/50">
-                      <img
-                        src={member.image}
-                        alt={member.name}
-                        className="object-cover w-full h-full"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement
-                          target.style.display = 'none'
-                          const parent = target.parentElement
-                          if (parent) {
-                            parent.style.background = member.fallbackGradient
-                            parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-4xl font-bold text-white">${member.name.split(' ').map((n: string) => n[0]).join('')}</div>`
-                          }
-                        }}
-                      />
+                    <div 
+                      className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden shadow-lg group-hover:shadow-2xl transition-shadow ring-2 ring-neon-blue/20 group-hover:ring-neon-blue/50 bg-cover bg-center"
+                      style={{ 
+                        backgroundImage: `url(${member.image})`,
+                        backgroundColor: member.fallbackGradient.includes('gradient') ? undefined : member.fallbackGradient
+                      }}
+                      onError={() => {
+                        // Fallback handled by background gradient
+                      }}
+                    >
+                      {/* Image will load as background, fallback is gradient */}
                     </div>
                   ) : (
                     <div

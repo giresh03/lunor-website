@@ -8,8 +8,14 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   swcMinify: true,
-  experimental: {
-    optimizeCss: true,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      }
+    }
+    return config
   },
 }
 

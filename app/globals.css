@@ -1,4 +1,7 @@
-/* Temporary simple CSS to test server */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   margin: 0;
   padding: 0;

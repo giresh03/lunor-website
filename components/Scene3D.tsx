@@ -70,10 +70,15 @@ function ParticleField() {
 }
 
 export default function Scene3D() {
+  if (typeof window === 'undefined') {
+    return <div className="w-full h-full bg-dark-bg" />
+  }
+
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 75 }}
       style={{ width: '100%', height: '100%' }}
+      gl={{ antialias: true, alpha: true }}
     >
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} intensity={1} />

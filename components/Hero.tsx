@@ -3,15 +3,21 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
 
-const Scene3D = dynamic(() => import('./Scene3D'), { ssr: false })
+const Scene3D = dynamic(() => import('./Scene3D'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-dark-bg" />
+})
 
 export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* 3D Background */}
       <div className="absolute inset-0 z-0">
-        <Scene3D />
+        <Suspense fallback={<div className="w-full h-full bg-dark-bg" />}>
+          <Scene3D />
+        </Suspense>
       </div>
 
       {/* Content */}

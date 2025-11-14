@@ -31,12 +31,15 @@ function AnimatedSphere() {
 
 function ParticleField() {
   const points = useRef<THREE.Points>(null)
+  const positionsRef = useRef<Float32Array | null>(null)
 
   const particlesCount = 1000
-  const positions = new Float32Array(particlesCount * 3)
-
-  for (let i = 0; i < particlesCount * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * 10
+  
+  if (!positionsRef.current) {
+    positionsRef.current = new Float32Array(particlesCount * 3)
+    for (let i = 0; i < particlesCount * 3; i++) {
+      positionsRef.current[i] = (Math.random() - 0.5) * 10
+    }
   }
 
   useFrame((state) => {
@@ -51,7 +54,7 @@ function ParticleField() {
         <bufferAttribute
           attach="attributes-position"
           count={particlesCount}
-          array={positions}
+          array={positionsRef.current}
           itemSize={3}
         />
       </bufferGeometry>

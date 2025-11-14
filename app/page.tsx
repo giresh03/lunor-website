@@ -13,26 +13,29 @@ import Navbar from '@/components/Navbar'
 import CursorGlow from '@/components/CursorGlow'
 import ChatBot from '@/components/ChatBot'
 import ProjectEstimator from '@/components/ProjectEstimator'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen">
-      <div className="spotlight" />
-      <div className="animated-bg fixed inset-0 -z-10" />
-      <CursorGlow />
-      <Navbar />
-      <Hero />
-      <About />
-      <Services />
-      <Team />
-      <Portfolio />
-      <TechStack />
-      <Testimonials />
-      <Contact />
-      <Footer />
-      <ChatBot />
-      <ProjectEstimator />
-    </main>
+    <ErrorBoundary>
+      <main className="relative min-h-screen">
+        <div className="spotlight" />
+        <div className="animated-bg fixed inset-0 -z-10" />
+        <CursorGlow />
+        <Navbar />
+        <Hero />
+        <About />
+        <Services />
+        <Team />
+        <Portfolio />
+        <TechStack />
+        <Testimonials />
+        <Contact />
+        <Footer />
+        <ChatBot />
+        <ProjectEstimator />
+      </main>
+    </ErrorBoundary>
   )
 }
 

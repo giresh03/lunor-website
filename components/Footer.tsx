@@ -14,7 +14,7 @@ const footerLinks = {
     { name: 'Web Development', href: '#services' },
     { name: 'Mobile Apps', href: '#services' },
     { name: 'AI/ML Solutions', href: '#services' },
-    { name: 'Student Projects', href: '#services' },
+    { name: 'Digital Marketing', href: '#services' },
   ],
   Resources: [
     { name: 'Blog', href: '#' },
@@ -31,11 +31,10 @@ const footerLinks = {
 }
 
 const socialLinks = [
-  { name: 'Twitter', href: '#', icon: 'T' },
-  { name: 'LinkedIn', href: '#', icon: 'Li' },
-  { name: 'GitHub', href: '#', icon: 'Gh' },
-  { name: 'Instagram', href: '#', icon: 'Ig' },
-  { name: 'Dribbble', href: '#', icon: 'Dr' },
+  { name: 'X', href: 'https://x.com/Lunor_ko', icon: 'X' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/lunorko', icon: 'Li' },
+  { name: 'Instagram', href: 'https://www.instagram.com/lunor.ko?igsh=YWJiMHA3bTI1bGNj', icon: 'Ig' },
+  { name: 'Telegram', href: 'https://t.me/+3rWsIOATWNs0NGFl', icon: 'Tg' },
 ]
 
 export default function Footer() {

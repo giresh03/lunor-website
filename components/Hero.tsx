@@ -2,7 +2,9 @@
 
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles } from 'lucide-react'
-import Scene3D from './Scene3D'
+import dynamic from 'next/dynamic'
+
+const Scene3D = dynamic(() => import('./Scene3D'), { ssr: false })
 
 export default function Hero() {
   return (

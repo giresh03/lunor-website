@@ -16,6 +16,7 @@ import ProjectEstimator from '@/components/ProjectEstimator'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import VoiceWelcome from '@/components/VoiceWelcome'
 import LiveCoding from '@/components/LiveCoding'
+import VoiceNavigation from '@/components/VoiceNavigation'
 
 export default function Home() {
   return (
@@ -38,6 +39,7 @@ export default function Home() {
         <ChatBot />
         <ProjectEstimator />
         <VoiceWelcome />
+        <VoiceNavigation />
       </main>
     </ErrorBoundary>
   )

@@ -26,7 +26,7 @@ export default function Scene3D() {
 
   try {
     const { Canvas, useFrame } = require('@react-three/fiber')
-    const { OrbitControls, Sphere, MeshDistortMaterial } = require('@react-three/drei')
+    const { Sphere, MeshDistortMaterial } = require('@react-three/drei')
     const THREE = require('three')
 
     function AnimatedSphere() {
@@ -75,56 +75,6 @@ export default function Scene3D() {
       )
     }
 
-    function ParticleField() {
-      const pointsRef = useRef<any>(null)
-      const geometryRef = useRef<any>(null)
-      const initializedRef = useRef(false)
-
-      const particlesCount = 1000
-
-      useFrame((state: any) => {
-        // Initialize geometry on first frame
-        if (!initializedRef.current && geometryRef.current) {
-          const positions = new Float32Array(particlesCount * 3)
-          for (let i = 0; i < particlesCount * 3; i++) {
-            positions[i] = (Math.random() - 0.5) * 10
-          }
-          geometryRef.current.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-          initializedRef.current = true
-        }
-
-        if (pointsRef.current && initializedRef.current) {
-          const mouseX = mousePosition.x
-          const mouseY = mousePosition.y
-
-          // Rotate particles based on mouse
-          pointsRef.current.rotation.y = THREE.MathUtils.lerp(
-            pointsRef.current.rotation.y,
-            state.clock.getElapsedTime() * 0.05 + mouseX * 0.2,
-            0.05
-          )
-          pointsRef.current.rotation.x = THREE.MathUtils.lerp(
-            pointsRef.current.rotation.x,
-            mouseY * 0.2,
-            0.05
-          )
-        }
-      })
-
-      return (
-        <points ref={pointsRef}>
-          <bufferGeometry ref={geometryRef} />
-          <pointsMaterial
-            size={0.02}
-            color="#00FFF5"
-            transparent
-            opacity={0.6}
-            sizeAttenuation
-          />
-        </points>
-      )
-    }
-
     function InteractiveScene() {
       return (
         <Canvas
@@ -136,13 +86,6 @@ export default function Scene3D() {
           <pointLight position={[10, 10, 10]} intensity={1} />
           <pointLight position={[-10, -10, -10]} color="#9D4EDD" intensity={0.5} />
           <AnimatedSphere />
-          <ParticleField />
-          <OrbitControls
-            enableZoom={false}
-            enablePan={false}
-            autoRotate={false}
-            enableRotate={false}
-          />
         </Canvas>
       )
     }

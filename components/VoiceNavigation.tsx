@@ -173,12 +173,7 @@ export default function VoiceNavigation() {
       {
         keywords: ['tech stack', 'technologies', 'show tech', 'technology'],
         action: () => {
-          // Try different possible IDs
-          if (
-            scrollToSection('tech-stack') ||
-            scrollToSection('techstack') ||
-            scrollToSection('technologies')
-          ) {
+          if (scrollToSection('tech')) {
             speak('Here is our tech stack')
           }
         },

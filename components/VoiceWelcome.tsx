@@ -1,10 +1,14 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 export default function VoiceWelcome() {
+  const hasPlayedRef = useRef(false)
+  const voicesLoadedRef = useRef(false)
+
   const playWelcomeMessage = () => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+    if (hasPlayedRef.current) return
     
     // Cancel any existing speech
     speechSynthesis.cancel()
@@ -12,23 +16,22 @@ export default function VoiceWelcome() {
     const utterance = new SpeechSynthesisUtterance('Welcome to Lunor dot K O. We build the future of digital innovation.')
     
     // Configure voice settings
-    utterance.rate = 0.9 // Slightly slower for clarity
-    utterance.pitch = 1.1 // Slightly higher pitch for female voice
+    utterance.rate = 0.9
+    utterance.pitch = 1.1
     utterance.volume = 0.8
     
-    // Try to use a female voice
+    // Get voices
     const voices = speechSynthesis.getVoices()
     
     // Priority list for female voices
     const femaleVoiceNames = [
-      'Samantha', // macOS
-      'Karen', // macOS
-      'Victoria', // macOS
-      'Google UK English Female', // Chrome
-      'Microsoft Zira - English (United States)', // Windows
-      'Microsoft Hazel - English (Great Britain)', // Windows
-      'Google US English Female', // Chrome
-      'en-US', // Generic English female
+      'Samantha',
+      'Karen',
+      'Victoria',
+      'Google UK English Female',
+      'Microsoft Zira',
+      'Microsoft Hazel',
+      'Google US English Female',
     ]
     
     // Find female voice
@@ -50,7 +53,7 @@ export default function VoiceWelcome() {
       })
     }
     
-    // Fallback to any English voice if no female found
+    // Fallback to any English voice
     if (!preferredVoice) {
       preferredVoice = voices.find(voice => voice.lang.startsWith('en'))
     }
@@ -59,41 +62,71 @@ export default function VoiceWelcome() {
       utterance.voice = preferredVoice
     }
     
-    speechSynthesis.speak(utterance)
+    utterance.onstart = () => {
+      hasPlayedRef.current = true
+    }
+    
+    utterance.onerror = (error) => {
+      console.error('Speech synthesis error:', error)
+    }
+    
+    try {
+      speechSynthesis.speak(utterance)
+    } catch (error) {
+      console.error('Error speaking:', error)
+    }
   }
 
   useEffect(() => {
-    // Check if browser supports speech synthesis
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      // Check if user has permanently disabled voice
-      const isMutedPreference = localStorage.getItem('lunor-voice-muted') === 'true'
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+    
+    const isMutedPreference = localStorage.getItem('lunor-voice-muted') === 'true'
+    if (isMutedPreference) return
+
+    const loadVoicesAndPlay = () => {
+      const voices = speechSynthesis.getVoices()
       
-      if (!isMutedPreference) {
-        // Load voices first, then play immediately
-        const loadAndPlay = () => {
-          const voices = speechSynthesis.getVoices()
-          if (voices.length > 0) {
-            playWelcomeMessage()
-          } else {
-            // If voices not loaded yet, wait a bit and try again
-            setTimeout(loadAndPlay, 100)
-          }
-        }
+      if (voices.length > 0 && !voicesLoadedRef.current) {
+        voicesLoadedRef.current = true
         
-        // Try to load voices immediately
-        speechSynthesis.getVoices()
-        loadAndPlay()
-        
-        // Listen for voices changed event (some browsers need this)
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-          speechSynthesis.onvoiceschanged = () => {
-            const voices = speechSynthesis.getVoices()
-            if (voices.length > 0 && !speechSynthesis.speaking) {
-              playWelcomeMessage()
-            }
-          }
-        }
+        // Small delay to ensure everything is ready
+        setTimeout(() => {
+          playWelcomeMessage()
+        }, 300)
       }
+    }
+
+    // Try to load voices immediately
+    loadVoicesAndPlay()
+
+    // Listen for voices changed event
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoicesAndPlay
+    }
+
+    // Fallback: try again after a short delay
+    const fallbackTimer = setTimeout(() => {
+      if (!hasPlayedRef.current && !voicesLoadedRef.current) {
+        loadVoicesAndPlay()
+      }
+    }, 500)
+
+    // Also try on any user interaction (click, touch, keypress)
+    const handleUserInteraction = () => {
+      if (!hasPlayedRef.current) {
+        loadVoicesAndPlay()
+      }
+    }
+
+    window.addEventListener('click', handleUserInteraction, { once: true })
+    window.addEventListener('touchstart', handleUserInteraction, { once: true })
+    window.addEventListener('keydown', handleUserInteraction, { once: true })
+
+    return () => {
+      clearTimeout(fallbackTimer)
+      window.removeEventListener('click', handleUserInteraction)
+      window.removeEventListener('touchstart', handleUserInteraction)
+      window.removeEventListener('keydown', handleUserInteraction)
     }
   }, [])
 

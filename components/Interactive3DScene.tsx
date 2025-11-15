@@ -11,7 +11,8 @@ declare global {
 }
 
 if (typeof window !== 'undefined') {
-  (window as any).mousePosition3D = (window as any).mousePosition3D || { x: 0, y: 0 }
+  const win = window as any
+  win.mousePosition3D = win.mousePosition3D || { x: 0, y: 0 }
 }
 
 function AnimatedSphere() {

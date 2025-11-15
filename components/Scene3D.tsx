@@ -16,7 +16,8 @@ export default function Scene3D() {
 
     // Initialize global mouse position tracker
     if (typeof window !== 'undefined') {
-      (window as any).mousePosition3D = { x: 0, y: 0 }
+      const win = window as any
+      win.mousePosition3D = { x: 0, y: 0 }
 
       const handleMouseMove = (e: MouseEvent) => {
         if ((window as any).mousePosition3D) {

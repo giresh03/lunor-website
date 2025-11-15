@@ -85,11 +85,25 @@ export default function VoiceWelcome() {
       
       utterance.onerror = (error) => {
         console.error('Speech synthesis error:', error)
-        hasPlayedRef.current = false // Allow retry on error
+        console.error('Error type:', error.error)
+        console.error('Error message:', error.message)
+        // Don't reset hasPlayedRef on error to prevent infinite retries
+        // The error might be due to browser autoplay policy
       }
       
       console.log('Attempting to speak...')
-      speechSynthesis.speak(utterance)
+      
+      // Check if speech synthesis is already speaking
+      if (speechSynthesis.speaking) {
+        console.log('Speech synthesis is already speaking, cancelling...')
+        speechSynthesis.cancel()
+        // Wait a bit before trying again
+        setTimeout(() => {
+          speechSynthesis.speak(utterance)
+        }, 100)
+      } else {
+        speechSynthesis.speak(utterance)
+      }
       
     } catch (error) {
       console.error('Error in playWelcomeMessage:', error)
@@ -159,27 +173,45 @@ export default function VoiceWelcome() {
       }, 2000),
     ]
 
-    // User interaction handlers (browsers may require this)
+    // User interaction handlers (browsers require this for autoplay)
     const handleInteraction = (eventType: string) => {
       return () => {
         console.log(`User interaction: ${eventType}`)
         if (!hasPlayedRef.current) {
-          tryPlay()
+          // Small delay to ensure browser allows audio
+          setTimeout(() => {
+            tryPlay()
+          }, 100)
         }
       }
     }
 
-    window.addEventListener('click', handleInteraction('click'), { once: true, passive: true })
-    window.addEventListener('touchstart', handleInteraction('touchstart'), { once: true, passive: true })
-    window.addEventListener('keydown', handleInteraction('keydown'), { once: true, passive: true })
-    window.addEventListener('mousemove', handleInteraction('mousemove'), { once: true, passive: true })
+    // Add interaction listeners - these are critical for browser autoplay policies
+    const clickHandler = handleInteraction('click')
+    const touchHandler = handleInteraction('touchstart')
+    const keyHandler = handleInteraction('keydown')
+    const mouseHandler = handleInteraction('mousemove')
+
+    window.addEventListener('click', clickHandler, { once: true, passive: true })
+    window.addEventListener('touchstart', touchHandler, { once: true, passive: true })
+    window.addEventListener('keydown', keyHandler, { once: true, passive: true })
+    window.addEventListener('mousemove', mouseHandler, { once: true, passive: true })
+    
+    // Also try on page visibility change (when user switches back to tab)
+    const visibilityHandler = () => {
+      if (document.visibilityState === 'visible' && !hasPlayedRef.current) {
+        setTimeout(() => tryPlay(), 200)
+      }
+    }
+    document.addEventListener('visibilitychange', visibilityHandler)
 
     return () => {
       timers.forEach(timer => clearTimeout(timer))
-      window.removeEventListener('click', handleInteraction('click'))
-      window.removeEventListener('touchstart', handleInteraction('touchstart'))
-      window.removeEventListener('keydown', handleInteraction('keydown'))
-      window.removeEventListener('mousemove', handleInteraction('mousemove'))
+      window.removeEventListener('click', clickHandler)
+      window.removeEventListener('touchstart', touchHandler)
+      window.removeEventListener('keydown', keyHandler)
+      window.removeEventListener('mousemove', mouseHandler)
+      document.removeEventListener('visibilitychange', visibilityHandler)
     }
   }, [])
 

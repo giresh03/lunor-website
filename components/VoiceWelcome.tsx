@@ -86,7 +86,6 @@ export default function VoiceWelcome() {
       utterance.onerror = (error) => {
         console.error('Speech synthesis error:', error)
         console.error('Error type:', error.error)
-        console.error('Error message:', error.message)
         // Don't reset hasPlayedRef on error to prevent infinite retries
         // The error might be due to browser autoplay policy
       }

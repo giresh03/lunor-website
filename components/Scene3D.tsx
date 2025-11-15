@@ -20,9 +20,10 @@ export default function Scene3D() {
       win.mousePosition3D = { x: 0, y: 0 }
 
       const handleMouseMove = (e: MouseEvent) => {
-        if ((window as any).mousePosition3D) {
-          (window as any).mousePosition3D.x = (e.clientX / window.innerWidth) * 2 - 1
-          (window as any).mousePosition3D.y = -(e.clientY / window.innerHeight) * 2 + 1
+        const win = window as any
+        if (win.mousePosition3D) {
+          win.mousePosition3D.x = (e.clientX / window.innerWidth) * 2 - 1
+          win.mousePosition3D.y = -(e.clientY / window.innerHeight) * 2 + 1
         }
       }
 

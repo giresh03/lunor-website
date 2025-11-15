@@ -20,7 +20,8 @@ function AnimatedSphere() {
 
   useFrame(() => {
     if (meshRef.current && typeof window !== 'undefined') {
-      const mousePos = (window as any).mousePosition3D || { x: 0, y: 0 }
+      const win = window as any
+      const mousePos = win.mousePosition3D || { x: 0, y: 0 }
       const mouseX = mousePos.x
       const mouseY = mousePos.y
 

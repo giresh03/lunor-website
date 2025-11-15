@@ -1,24 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Volume2, VolumeX } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect } from 'react'
 
 export default function VoiceWelcome() {
-  const [isMuted, setIsMuted] = useState(false)
-  const [hasPlayed, setHasPlayed] = useState(false)
-  const [isSupported, setIsSupported] = useState(false)
-
   useEffect(() => {
     // Check if browser supports speech synthesis
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      setIsSupported(true)
-      
-      // Check if user has already heard the welcome message in this session
-      const hasHeardWelcome = sessionStorage.getItem('lunor-welcome-played')
+      // Check if user has permanently disabled voice
       const isMutedPreference = localStorage.getItem('lunor-voice-muted') === 'true'
       
-      if (!hasHeardWelcome && !isMutedPreference) {
+      if (!isMutedPreference) {
         // Load voices first, then play immediately
         const loadAndPlay = () => {
           const voices = speechSynthesis.getVoices()
@@ -33,14 +24,15 @@ export default function VoiceWelcome() {
         // Try to load voices immediately
         speechSynthesis.getVoices()
         loadAndPlay()
-      } else if (isMutedPreference) {
-        setIsMuted(true)
       }
     }
   }, [])
 
   const playWelcomeMessage = () => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+    
+    // Cancel any existing speech
+    speechSynthesis.cancel()
     
     const utterance = new SpeechSynthesisUtterance('Welcome to Lunor dot K O. We build the future of digital innovation.')
     
@@ -92,26 +84,7 @@ export default function VoiceWelcome() {
       utterance.voice = preferredVoice
     }
     
-    utterance.onend = () => {
-      setHasPlayed(true)
-      sessionStorage.setItem('lunor-welcome-played', 'true')
-    }
-    
     speechSynthesis.speak(utterance)
-  }
-
-  const toggleMute = () => {
-    if (isMuted) {
-      setIsMuted(false)
-      localStorage.removeItem('lunor-voice-muted')
-      if (!hasPlayed) {
-        playWelcomeMessage()
-      }
-    } else {
-      setIsMuted(true)
-      localStorage.setItem('lunor-voice-muted', 'true')
-      speechSynthesis.cancel()
-    }
   }
 
   // Load voices when available
@@ -119,11 +92,7 @@ export default function VoiceWelcome() {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       // Some browsers need voices to be loaded
       const loadVoices = () => {
-        const voices = speechSynthesis.getVoices()
-        // Trigger voice loading immediately
-        if (voices.length > 0) {
-          // Voices are loaded, component will handle playing
-        }
+        speechSynthesis.getVoices()
       }
       
       // Load voices immediately
@@ -136,27 +105,6 @@ export default function VoiceWelcome() {
     }
   }, [])
 
-  if (!isSupported) return null
-
-  return (
-    <AnimatePresence>
-      <motion.button
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
-        onClick={toggleMute}
-        className="fixed bottom-24 right-6 z-50 w-12 h-12 glass-effect rounded-full flex items-center justify-center border border-white/10 hover:border-neon-blue/50 transition-all group"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        title={isMuted ? 'Enable voice welcome' : 'Mute voice welcome'}
-      >
-        {isMuted ? (
-          <VolumeX className="w-5 h-5 text-gray-400 group-hover:text-neon-blue transition-colors" />
-        ) : (
-          <Volume2 className="w-5 h-5 text-neon-cyan group-hover:text-neon-blue transition-colors" />
-        )}
-      </motion.button>
-    </AnimatePresence>
-  )
+  return null
 }
 

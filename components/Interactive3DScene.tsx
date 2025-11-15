@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Sphere, MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
@@ -65,16 +65,20 @@ function AnimatedSphere() {
 
 export default function Interactive3DScene() {
   return (
-    <Canvas
-      camera={{ position: [0, 0, 5], fov: 75 }}
-      style={{ width: '100%', height: '100%' }}
-      gl={{ antialias: true, alpha: true }}
-    >
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
-      <pointLight position={[-10, -10, -10]} color="#9D4EDD" intensity={0.5} />
-      <AnimatedSphere />
-    </Canvas>
+    <Suspense fallback={<div className="w-full h-full bg-dark-bg" />}>
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 75 }}
+        style={{ width: '100%', height: '100%' }}
+        gl={{ antialias: true, alpha: true }}
+        dpr={[1, 2]}
+        performance={{ min: 0.5 }}
+      >
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        <pointLight position={[-10, -10, -10]} color="#9D4EDD" intensity={0.5} />
+        <AnimatedSphere />
+      </Canvas>
+    </Suspense>
   )
 }
 

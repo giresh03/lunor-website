@@ -77,19 +77,23 @@ export default function Scene3D() {
 
     function ParticleField() {
       const pointsRef = useRef<any>(null)
-      const positionsRef = useRef<Float32Array | null>(null)
+      const geometryRef = useRef<any>(null)
+      const initializedRef = useRef(false)
 
       const particlesCount = 1000
 
-      if (!positionsRef.current && typeof window !== 'undefined') {
-        positionsRef.current = new Float32Array(particlesCount * 3)
-        for (let i = 0; i < particlesCount * 3; i++) {
-          positionsRef.current[i] = (Math.random() - 0.5) * 10
-        }
-      }
-
       useFrame((state: any) => {
-        if (pointsRef.current) {
+        // Initialize geometry on first frame
+        if (!initializedRef.current && geometryRef.current) {
+          const positions = new Float32Array(particlesCount * 3)
+          for (let i = 0; i < particlesCount * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 10
+          }
+          geometryRef.current.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+          initializedRef.current = true
+        }
+
+        if (pointsRef.current && initializedRef.current) {
           const mouseX = mousePosition.x
           const mouseY = mousePosition.y
 
@@ -107,18 +111,9 @@ export default function Scene3D() {
         }
       })
 
-      if (!positionsRef.current) return null
-
       return (
         <points ref={pointsRef}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              count={particlesCount}
-              array={positionsRef.current}
-              itemSize={3}
-            />
-          </bufferGeometry>
+          <bufferGeometry ref={geometryRef} />
           <pointsMaterial
             size={0.02}
             color="#00FFF5"

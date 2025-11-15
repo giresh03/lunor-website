@@ -21,19 +21,17 @@ export default function Interactive3DScene() {
 
     const animate = () => {
       // Smooth interpolation
-      currentX += (mouseX - currentX) * 0.05
-      currentY += (mouseY - currentY) * 0.05
+      currentX += (mouseX - currentX) * 0.03
+      currentY += (mouseY - currentY) * 0.03
 
-      // Apply transform
-      const rotateX = currentY * 20
-      const rotateY = currentX * 20
-      const translateZ = Math.abs(currentX) * 50 + Math.abs(currentY) * 50
+      // Apply subtle transform
+      const rotateX = currentY * 10
+      const rotateY = currentX * 10
 
       container.style.transform = `
         perspective(1000px)
         rotateX(${rotateX}deg)
         rotateY(${rotateY}deg)
-        translateZ(${translateZ}px)
       `
 
       requestAnimationFrame(animate)
@@ -57,63 +55,86 @@ export default function Interactive3DScene() {
           transition: 'none',
         }}
       >
-        {/* Animated gradient sphere */}
+        {/* Subtle geometric shapes */}
         <div
           className="relative"
           style={{
-            width: '600px',
-            height: '600px',
+            width: '800px',
+            height: '800px',
             transformStyle: 'preserve-3d',
           }}
         >
-          {/* Outer glow */}
+          {/* Outer ring - subtle */}
           <div
-            className="absolute inset-0 rounded-full blur-3xl opacity-30"
+            className="absolute inset-0 rounded-full border"
             style={{
-              background: 'radial-gradient(circle, #00D4FF 0%, #9D4EDD 50%, transparent 70%)',
+              borderColor: 'rgba(0, 212, 255, 0.1)',
+              borderWidth: '1px',
               transform: 'translateZ(0)',
             }}
           />
           
-          {/* Middle layer */}
+          {/* Middle ring */}
           <div
-            className="absolute inset-0 rounded-full blur-2xl opacity-50"
+            className="absolute inset-0 rounded-full border"
             style={{
-              background: 'radial-gradient(circle, #00FFF5 0%, #00D4FF 40%, #9D4EDD 80%, transparent 100%)',
-              transform: 'translateZ(50px)',
+              borderColor: 'rgba(157, 78, 221, 0.08)',
+              borderWidth: '1px',
+              transform: 'translateZ(50px) scale(0.7)',
             }}
           />
           
-          {/* Inner core */}
+          {/* Inner ring */}
           <div
-            className="absolute inset-0 rounded-full blur-xl"
+            className="absolute inset-0 rounded-full border"
             style={{
-              background: 'radial-gradient(circle, #00D4FF 0%, #9D4EDD 100%)',
-              transform: 'translateZ(100px)',
-              boxShadow: '0 0 100px rgba(0, 212, 255, 0.5), 0 0 200px rgba(157, 78, 221, 0.3)',
+              borderColor: 'rgba(0, 255, 245, 0.06)',
+              borderWidth: '1px',
+              transform: 'translateZ(100px) scale(0.4)',
             }}
           />
           
-          {/* Particles */}
-          {Array.from({ length: 20 }).map((_, i) => {
-            const angle = (i / 20) * Math.PI * 2
-            const radius = 250
-            const x = Math.cos(angle) * radius
-            const y = Math.sin(angle) * radius
-            const delay = Math.random() * 2
-            const duration = 2 + Math.random() * 2
+          {/* Subtle grid lines */}
+          {Array.from({ length: 12 }).map((_, i) => {
+            const angle = (i / 12) * Math.PI * 2
+            const length = 300
             
             return (
               <div
-                key={i}
-                className="absolute w-2 h-2 rounded-full bg-cyan-400"
+                key={`line-${i}`}
+                className="absolute"
                 style={{
                   left: '50%',
                   top: '50%',
-                  transform: `translate(${x}px, ${y}px) translateZ(${Math.random() * 200}px)`,
-                  boxShadow: '0 0 10px rgba(0, 255, 245, 0.8)',
-                  animation: `pulse ${duration}s ease-in-out infinite`,
-                  animationDelay: `${delay}s`,
+                  width: '1px',
+                  height: `${length}px`,
+                  background: 'linear-gradient(to bottom, transparent, rgba(0, 212, 255, 0.05), transparent)',
+                  transform: `translate(-50%, -50%) rotate(${angle}rad) translateZ(0)`,
+                  transformOrigin: 'top center',
+                }}
+              />
+            )
+          })}
+          
+          {/* Subtle floating dots */}
+          {Array.from({ length: 8 }).map((_, i) => {
+            const angle = (i / 8) * Math.PI * 2
+            const radius = 200
+            const x = Math.cos(angle) * radius
+            const y = Math.sin(angle) * radius
+            
+            return (
+              <div
+                key={`dot-${i}`}
+                className="absolute w-1 h-1 rounded-full"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  background: 'rgba(0, 212, 255, 0.3)',
+                  transform: `translate(${x}px, ${y}px) translateZ(${50 + i * 10}px)`,
+                  boxShadow: '0 0 4px rgba(0, 212, 255, 0.2)',
+                  animation: `float ${3 + i * 0.5}s ease-in-out infinite`,
+                  animationDelay: `${i * 0.2}s`,
                 }}
               />
             )
@@ -123,9 +144,15 @@ export default function Interactive3DScene() {
       
       <style dangerouslySetInnerHTML={{
         __html: `
-          @keyframes pulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.5); }
+          @keyframes float {
+            0%, 100% { 
+              opacity: 0.2; 
+              transform: translateY(0) scale(1); 
+            }
+            50% { 
+              opacity: 0.4; 
+              transform: translateY(-10px) scale(1.2); 
+            }
           }
         `
       }} />

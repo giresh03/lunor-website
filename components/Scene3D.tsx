@@ -2,45 +2,40 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+// Global mouse position tracker
+const mousePosition = { x: 0, y: 0 }
+
 export default function Scene3D() {
   const [mounted, setMounted] = useState(false)
-  const mouseRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (!mounted) return
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = {
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1,
-      }
+      mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1
+      mousePosition.y = -(e.clientY / window.innerHeight) * 2 + 1
     }
 
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [mounted])
+  }, [])
 
   if (!mounted || typeof window === 'undefined') {
     return <div className="w-full h-full bg-dark-bg" />
   }
 
   try {
-    const { Canvas, useFrame, useThree } = require('@react-three/fiber')
+    const { Canvas, useFrame } = require('@react-three/fiber')
     const { OrbitControls, Sphere, MeshDistortMaterial } = require('@react-three/drei')
     const THREE = require('three')
 
     function AnimatedSphere() {
       const meshRef = useRef<any>(null)
-      const { viewport } = useThree()
 
-      useFrame((state) => {
+      useFrame(() => {
         if (meshRef.current) {
-          const mouseX = mouseRef.current.x
-          const mouseY = mouseRef.current.y
+          const mouseX = mousePosition.x
+          const mouseY = mousePosition.y
 
           // Smooth rotation based on mouse position
           meshRef.current.rotation.x = THREE.MathUtils.lerp(
@@ -93,10 +88,10 @@ export default function Scene3D() {
         }
       }
 
-      useFrame((state) => {
+      useFrame((state: any) => {
         if (pointsRef.current) {
-          const mouseX = mouseRef.current.x
-          const mouseY = mouseRef.current.y
+          const mouseX = mousePosition.x
+          const mouseY = mousePosition.y
 
           // Rotate particles based on mouse
           pointsRef.current.rotation.y = THREE.MathUtils.lerp(

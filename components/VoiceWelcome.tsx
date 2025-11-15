@@ -3,31 +3,6 @@
 import { useEffect } from 'react'
 
 export default function VoiceWelcome() {
-  useEffect(() => {
-    // Check if browser supports speech synthesis
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      // Check if user has permanently disabled voice
-      const isMutedPreference = localStorage.getItem('lunor-voice-muted') === 'true'
-      
-      if (!isMutedPreference) {
-        // Load voices first, then play immediately
-        const loadAndPlay = () => {
-          const voices = speechSynthesis.getVoices()
-          if (voices.length > 0) {
-            playWelcomeMessage()
-          } else {
-            // If voices not loaded yet, wait a bit and try again
-            setTimeout(loadAndPlay, 100)
-          }
-        }
-        
-        // Try to load voices immediately
-        speechSynthesis.getVoices()
-        loadAndPlay()
-      }
-    }
-  }, [])
-
   const playWelcomeMessage = () => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
     
@@ -87,20 +62,37 @@ export default function VoiceWelcome() {
     speechSynthesis.speak(utterance)
   }
 
-  // Load voices when available
   useEffect(() => {
+    // Check if browser supports speech synthesis
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      // Some browsers need voices to be loaded
-      const loadVoices = () => {
+      // Check if user has permanently disabled voice
+      const isMutedPreference = localStorage.getItem('lunor-voice-muted') === 'true'
+      
+      if (!isMutedPreference) {
+        // Load voices first, then play immediately
+        const loadAndPlay = () => {
+          const voices = speechSynthesis.getVoices()
+          if (voices.length > 0) {
+            playWelcomeMessage()
+          } else {
+            // If voices not loaded yet, wait a bit and try again
+            setTimeout(loadAndPlay, 100)
+          }
+        }
+        
+        // Try to load voices immediately
         speechSynthesis.getVoices()
-      }
-      
-      // Load voices immediately
-      loadVoices()
-      
-      // Listen for voices changed event
-      if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = loadVoices
+        loadAndPlay()
+        
+        // Listen for voices changed event (some browsers need this)
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+          speechSynthesis.onvoiceschanged = () => {
+            const voices = speechSynthesis.getVoices()
+            if (voices.length > 0 && !speechSynthesis.speaking) {
+              playWelcomeMessage()
+            }
+          }
+        }
       }
     }
   }, [])

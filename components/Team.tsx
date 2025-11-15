@@ -3,13 +3,14 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { Linkedin, Github, Mail, Code, Palette, TrendingUp, Users, Megaphone, Database } from 'lucide-react'
+import Image from 'next/image'
 
 const teamMembers = [
   {
     name: 'Girish Kumar',
     role: 'Head of Lunor.ko',
     title: 'Full Stack Developer & App Developer',
-    avatar: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    avatar: '/Girish.jpeg',
     bio: 'Leading the vision and technical direction of Lunor.ko with expertise in full-stack development and mobile applications.',
     skills: ['React', 'Node.js', 'React Native', 'TypeScript', 'MongoDB', 'AWS'],
     icon: Code,
@@ -23,7 +24,7 @@ const teamMembers = [
     name: 'Jaswanth',
     role: 'Digital Marketing Specialist',
     title: 'Growth & Marketing Expert',
-    avatar: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    avatar: '/Jaswanth.jpeg',
     bio: 'Driving digital growth through strategic marketing campaigns and data-driven insights.',
     skills: ['SEO', 'Google Ads', 'Analytics', 'Social Media', 'Content Strategy'],
     icon: TrendingUp,
@@ -36,7 +37,7 @@ const teamMembers = [
     name: 'Srinitha',
     role: 'Frontend Developer',
     title: 'UI/UX Implementation Expert',
-    avatar: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    avatar: '/Srinitha.jpeg',
     bio: 'Crafting beautiful and responsive user interfaces with modern web technologies.',
     skills: ['React', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'JavaScript'],
     icon: Palette,
@@ -50,7 +51,7 @@ const teamMembers = [
     name: 'Angeline',
     role: 'Backend Developer',
     title: 'Server & Database Architect',
-    avatar: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    avatar: '/Angeline.jpeg',
     bio: 'Building robust and scalable backend systems that power our applications.',
     skills: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'API Design', 'Docker'],
     icon: Database,
@@ -64,7 +65,7 @@ const teamMembers = [
     name: 'Sai Charan',
     role: 'Sales Marketer',
     title: 'Client Relations & Growth',
-    avatar: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
     bio: 'Connecting clients with perfect solutions and driving business growth.',
     skills: ['B2B Sales', 'CRM', 'Client Relations', 'Negotiation', 'Lead Generation'],
     icon: Users,
@@ -77,7 +78,7 @@ const teamMembers = [
     name: 'Pragya',
     role: 'Figma Designer & Social Media Controller',
     title: 'Design & Brand Specialist',
-    avatar: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
     bio: 'Creating stunning designs and managing our social media presence with creativity.',
     skills: ['Figma', 'UI/UX Design', 'Social Media', 'Brand Identity', 'Content Creation'],
     icon: Megaphone,
@@ -135,11 +136,14 @@ export default function Team() {
               >
                 {/* Avatar */}
                 <div className="relative mb-6">
-                  <div
-                    className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl font-bold text-white shadow-lg group-hover:shadow-2xl transition-shadow"
-                    style={{ background: member.avatar }}
-                  >
-                    {member.name.split(' ').map(n => n[0]).join('')}
+                  <div className="w-24 h-24 rounded-full mx-auto mb-4 relative overflow-hidden shadow-lg group-hover:shadow-2xl transition-shadow ring-4 ring-dark-bg">
+                    <Image
+                      src={member.avatar}
+                      alt={member.name}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      sizes="96px"
+                    />
                   </div>
                   <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
                     <div className="w-12 h-12 bg-gradient-to-br from-neon-blue to-neon-purple rounded-full flex items-center justify-center border-4 border-dark-bg">

@@ -3,6 +3,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { ExternalLink, Github } from 'lucide-react'
+import Image from 'next/image'
 
 const categories = ['All', 'Web', 'Mobile', 'AI/ML', 'Student', 'Industrial']
 
@@ -11,7 +12,7 @@ const projects = [
     title: 'E-Commerce Platform',
     category: 'Web',
     description: 'Modern e-commerce solution with real-time inventory and AI recommendations',
-    image: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
     technologies: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
     link: '#',
     github: '#',
@@ -20,7 +21,7 @@ const projects = [
     title: 'Fitness Tracking App',
     category: 'Mobile',
     description: 'Cross-platform fitness app with workout plans and progress tracking',
-    image: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
     technologies: ['React Native', 'Firebase', 'TensorFlow'],
     link: '#',
     github: '#',
@@ -29,7 +30,7 @@ const projects = [
     title: 'Predictive Analytics Engine',
     category: 'AI/ML',
     description: 'ML-powered analytics platform for business intelligence',
-    image: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
     technologies: ['Python', 'TensorFlow', 'React', 'FastAPI'],
     link: '#',
     github: '#',
@@ -38,7 +39,7 @@ const projects = [
     title: 'Smart Campus System',
     category: 'Student',
     description: 'IoT-based attendance and resource management for universities',
-    image: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
     technologies: ['React', 'Node.js', 'MQTT', 'MongoDB'],
     link: '#',
     github: '#',
@@ -47,7 +48,7 @@ const projects = [
     title: 'Industrial Monitor Dashboard',
     category: 'Industrial',
     description: 'Real-time monitoring and control system for manufacturing',
-    image: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80',
     technologies: ['Vue.js', 'Node.js', 'InfluxDB', 'WebSocket'],
     link: '#',
     github: '#',
@@ -56,7 +57,7 @@ const projects = [
     title: 'AI Chatbot Platform',
     category: 'AI/ML',
     description: 'Intelligent chatbot with NLP and sentiment analysis',
-    image: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80',
     technologies: ['Python', 'GPT-4', 'React', 'Redis'],
     link: '#',
     github: '#',
@@ -65,7 +66,7 @@ const projects = [
     title: 'Portfolio Website Builder',
     category: 'Web',
     description: 'Drag-and-drop portfolio builder with custom templates',
-    image: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+    image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80',
     technologies: ['Next.js', 'Prisma', 'PostgreSQL', 'AWS'],
     link: '#',
     github: '#',
@@ -74,7 +75,7 @@ const projects = [
     title: 'Medical Records App',
     category: 'Mobile',
     description: 'Secure health records management with doctor consultation',
-    image: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&q=80',
     technologies: ['Flutter', 'Firebase', 'Node.js'],
     link: '#',
     github: '#',
@@ -83,7 +84,7 @@ const projects = [
     title: 'Student Project Hub',
     category: 'Student',
     description: 'Collaborative platform for capstone project management',
-    image: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+    image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
     technologies: ['React', 'Express', 'MongoDB', 'Socket.io'],
     link: '#',
     github: '#',
@@ -166,11 +167,16 @@ export default function Portfolio() {
               transition={{ delay: index * 0.1 }}
               className="group glass-effect rounded-2xl overflow-hidden border border-white/10 hover:border-neon-blue/50 transition-all"
             >
-              {/* Project Image/Gradient */}
-              <div 
-                className="h-48 relative overflow-hidden"
-                style={{ background: project.image }}
-              >
+              {/* Project Image */}
+              <div className="h-48 relative overflow-hidden bg-dark-surface">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all" />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
                   <div className="flex gap-4">
@@ -180,7 +186,7 @@ export default function Portfolio() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
-                      <ExternalLink className="w-5 h-5" />
+                      <ExternalLink className="w-5 h-5 text-white" />
                     </motion.a>
                     <motion.a
                       href={project.github}
@@ -188,7 +194,7 @@ export default function Portfolio() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
-                      <Github className="w-5 h-5" />
+                      <Github className="w-5 h-5 text-white" />
                     </motion.a>
                   </div>
                 </div>

@@ -100,6 +100,8 @@ export default function Interactive3DScene() {
             const radius = 250
             const x = Math.cos(angle) * radius
             const y = Math.sin(angle) * radius
+            const delay = Math.random() * 2
+            const duration = 2 + Math.random() * 2
             
             return (
               <div
@@ -110,8 +112,8 @@ export default function Interactive3DScene() {
                   top: '50%',
                   transform: `translate(${x}px, ${y}px) translateZ(${Math.random() * 200}px)`,
                   boxShadow: '0 0 10px rgba(0, 255, 245, 0.8)',
-                  animation: `pulse-${i} ${2 + Math.random() * 2}s ease-in-out infinite`,
-                  animationDelay: `${Math.random() * 2}s`,
+                  animation: `pulse ${duration}s ease-in-out infinite`,
+                  animationDelay: `${delay}s`,
                 }}
               />
             )
@@ -119,23 +121,14 @@ export default function Interactive3DScene() {
         </div>
       </div>
       
-      <style jsx>{`
-        @keyframes pulse-0 {
-          0%, 100% { opacity: 0.3; transform: translate(${Math.cos(0) * 250}px, ${Math.sin(0) * 250}px) translateZ(${Math.random() * 200}px) scale(1); }
-          50% { opacity: 1; transform: translate(${Math.cos(0) * 250}px, ${Math.sin(0) * 250}px) translateZ(${Math.random() * 200}px) scale(1.5); }
-        }
-        ${Array.from({ length: 20 }).map((_, i) => {
-          const angle = (i / 20) * Math.PI * 2
-          const x = Math.cos(angle) * 250
-          const y = Math.sin(angle) * 250
-          return `
-            @keyframes pulse-${i} {
-              0%, 100% { opacity: 0.3; transform: translate(${x}px, ${y}px) translateZ(${Math.random() * 200}px) scale(1); }
-              50% { opacity: 1; transform: translate(${x}px, ${y}px) translateZ(${Math.random() * 200}px) scale(1.5); }
-            }
-          `
-        }).join('')}
-      `}</style>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+          }
+        `
+      }} />
     </div>
   )
 }

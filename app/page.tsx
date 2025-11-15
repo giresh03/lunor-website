@@ -15,6 +15,7 @@ import ChatBot from '@/components/ChatBot'
 import ProjectEstimator from '@/components/ProjectEstimator'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import VoiceWelcome from '@/components/VoiceWelcome'
+import LiveCoding from '@/components/LiveCoding'
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
         <Navbar />
         <Hero />
         <About />
+        <LiveCoding />
         <Services />
         <Team />
         <Portfolio />

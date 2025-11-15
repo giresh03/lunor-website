@@ -13,23 +13,6 @@ export default function Scene3D() {
 
   useEffect(() => {
     setMounted(true)
-
-    // Initialize global mouse position tracker
-    if (typeof window !== 'undefined') {
-      const win = window as any
-      win.mousePosition3D = { x: 0, y: 0 }
-
-      const handleMouseMove = (e: MouseEvent) => {
-        const win = window as any
-        if (win.mousePosition3D) {
-          win.mousePosition3D.x = (e.clientX / window.innerWidth) * 2 - 1
-          win.mousePosition3D.y = -(e.clientY / window.innerHeight) * 2 + 1
-        }
-      }
-
-      window.addEventListener('mousemove', handleMouseMove)
-      return () => window.removeEventListener('mousemove', handleMouseMove)
-    }
   }, [])
 
   if (!mounted || typeof window === 'undefined') {

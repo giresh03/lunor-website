@@ -7,17 +7,6 @@ const nextConfig = {
   },
   compress: true,
   poweredByHeader: false,
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Force single React instance to prevent conflicts
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        react: require.resolve('react'),
-        'react-dom': require.resolve('react-dom'),
-      }
-    }
-    return config
-  },
 }
 
 module.exports = nextConfig

@@ -44,7 +44,7 @@ function generatePlanFromIdea(idea: string): Plan {
       : '6–8 weeks (Discovery → MVP → Polish → Launch)'
 
   const budget =
-    features.length > 6 ? '₹4.5L–₹7.5L (scope-dependent)' : '₹2.5L–₹4.5L (scope-dependent)'
+    features.length > 6 ? '₹25,000–₹30,000 (scope-dependent)' : '₹15,000–₹25,000 (scope-dependent)'
 
   return {
     problem,

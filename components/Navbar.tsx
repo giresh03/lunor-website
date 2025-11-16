@@ -12,6 +12,7 @@ const navLinks = [
   { name: 'Portfolio', href: '#portfolio' },
   { name: 'Tech Stack', href: '#tech' },
   { name: 'Contact', href: '#contact' },
+  { name: 'Case Studies', href: '/case-studies' },
 ]
 
 export default function Navbar() {

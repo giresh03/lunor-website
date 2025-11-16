@@ -18,6 +18,7 @@ import VoiceWelcome from '@/components/VoiceWelcome'
 import LiveCoding from '@/components/LiveCoding'
 import VoiceNavigation from '@/components/VoiceNavigation'
 import Playground from '@/components/Playground'
+import SuccessStories from '@/components/SuccessStories'
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ export default function Home() {
         <Services />
         <Team />
         <Portfolio />
+        <SuccessStories />
         <TechStack />
         <Testimonials />
         <Contact />

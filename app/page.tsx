@@ -17,6 +17,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import VoiceWelcome from '@/components/VoiceWelcome'
 import LiveCoding from '@/components/LiveCoding'
 import VoiceNavigation from '@/components/VoiceNavigation'
+import Playground from '@/components/Playground'
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         <Hero />
         <About />
         <LiveCoding />
+        <Playground />
         <Services />
         <Team />
         <Portfolio />

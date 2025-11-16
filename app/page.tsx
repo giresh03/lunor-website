@@ -12,7 +12,7 @@ import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import CursorGlow from '@/components/CursorGlow'
 import ChatBot from '@/components/ChatBot'
-import ProjectEstimator from '@/components/ProjectEstimator'
+import ProjectBrainstormer from '@/components/ProjectBrainstormer'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import VoiceWelcome from '@/components/VoiceWelcome'
 import LiveCoding from '@/components/LiveCoding'
@@ -37,7 +37,7 @@ export default function Home() {
         <Contact />
         <Footer />
         <ChatBot />
-        <ProjectEstimator />
+        <ProjectBrainstormer />
         <VoiceWelcome />
         <VoiceNavigation />
       </main>

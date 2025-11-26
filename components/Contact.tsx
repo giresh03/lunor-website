@@ -105,7 +105,7 @@ export default function Contact() {
                 {
                   icon: MapPin,
                   label: 'Location',
-                  value: 'San Francisco, CA',
+                  value: 'Chennai, India',
                   gradient: 'from-green-500 to-emerald-500',
                 },
                 {

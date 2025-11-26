@@ -1,8 +1,137 @@
 'use client'
 
 import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { Linkedin, Github, Mail, Code, Palette, TrendingUp, Users, Megaphone, Database } from 'lucide-react'
+import { useRef, useState } from 'react'
+import Image from 'next/image'
+import { Linkedin, Github, Mail, Code, Palette, TrendingUp, Users, Megaphone, Database, Shield, LucideIcon } from 'lucide-react'
+
+type TeamMember = {
+  name: string
+  role: string
+  title: string
+  image: string
+  fallbackGradient: string
+  bio: string
+  skills: string[]
+  icon: LucideIcon
+  social: {
+    linkedin?: string
+    github?: string
+    email: string
+  }
+}
+
+type TeamMemberCardProps = {
+  member: TeamMember
+  index: number
+  isInView: boolean
+}
+
+function TeamMemberCard({ member, index, isInView }: TeamMemberCardProps) {
+  const [imageError, setImageError] = useState(false)
+  const Icon = member.icon
+  const imagePath = member.image || `/team/${member.name.toLowerCase().replace(/\s+/g, '-')}.jpg`
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ delay: 0.1 + index * 0.1, duration: 0.6 }}
+      className="group glass-effect p-8 rounded-2xl border border-white/10 hover:border-neon-blue/50 transition-all"
+      whileHover={{ scale: 1.05, y: -10 }}
+    >
+      {/* Avatar */}
+      <div className="relative mb-6">
+        <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden shadow-lg group-hover:shadow-2xl transition-shadow ring-2 ring-neon-blue/20 group-hover:ring-neon-blue/50 relative">
+          {!imageError ? (
+            <Image
+              src={imagePath}
+              alt={member.name}
+              width={96}
+              height={96}
+              className="w-full h-full object-cover"
+              onError={() => setImageError(true)}
+              unoptimized
+            />
+          ) : (
+            <div
+              className="w-full h-full flex items-center justify-center text-4xl font-bold text-white"
+              style={{ background: member.fallbackGradient }}
+            >
+              {member.name.split(' ').map((n: string) => n[0]).join('')}
+            </div>
+          )}
+        </div>
+        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+          <div className="w-12 h-12 bg-gradient-to-br from-neon-blue to-neon-purple rounded-full flex items-center justify-center border-4 border-dark-bg">
+            <Icon className="w-6 h-6 text-white" />
+          </div>
+        </div>
+      </div>
+
+      {/* Info */}
+      <div className="text-center mb-6">
+        <h3 className="text-2xl font-bold mb-2 text-white group-hover:text-gradient transition-all">
+          {member.name}
+        </h3>
+        <p className="text-neon-cyan font-semibold mb-1">{member.role}</p>
+        <p className="text-sm text-gray-400">{member.title}</p>
+      </div>
+
+      {/* Bio */}
+      <p className="text-gray-400 text-sm mb-6 text-center leading-relaxed">
+        {member.bio}
+      </p>
+
+      {/* Skills */}
+      <div className="mb-6">
+        <h4 className="text-sm font-semibold text-gray-500 mb-3 uppercase">Skills</h4>
+        <div className="flex flex-wrap gap-2">
+          {member.skills.map((skill, idx) => (
+            <span
+              key={idx}
+              className="px-3 py-1 bg-white/5 border border-white/10 text-xs text-gray-300 rounded-full"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Social Links */}
+      <div className="flex justify-center gap-4">
+        {member.social.linkedin && (
+          <motion.a
+            href={member.social.linkedin}
+            className="w-10 h-10 glass-effect rounded-lg flex items-center justify-center border border-white/10 hover:border-neon-blue/50 transition-all"
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Linkedin className="w-5 h-5 text-gray-400 hover:text-neon-blue transition-colors" />
+          </motion.a>
+        )}
+        {member.social.github && (
+          <motion.a
+            href={member.social.github}
+            className="w-10 h-10 glass-effect rounded-lg flex items-center justify-center border border-white/10 hover:border-neon-blue/50 transition-all"
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Github className="w-5 h-5 text-gray-400 hover:text-neon-blue transition-colors" />
+          </motion.a>
+        )}
+        <motion.a
+          href={`mailto:${member.social.email}`}
+          className="w-10 h-10 glass-effect rounded-lg flex items-center justify-center border border-white/10 hover:border-neon-blue/50 transition-all"
+          whileHover={{ scale: 1.1, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Mail className="w-5 h-5 text-gray-400 hover:text-neon-blue transition-colors" />
+        </motion.a>
+      </div>
+    </motion.div>
+  )
+}
 
 const teamMembers = [
   {
@@ -21,16 +150,47 @@ const teamMembers = [
     }
   },
   {
-    name: 'Jaswanth',
-    role: 'Digital Marketing Specialist',
-    title: 'Growth & Marketing Expert',
-    image: '/team/jaswanth.jpg',
-    fallbackGradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    bio: 'Driving digital growth through strategic marketing campaigns and data-driven insights.',
-    skills: ['SEO', 'Google Ads', 'Analytics', 'Social Media', 'Content Strategy'],
-    icon: TrendingUp,
+    name: 'Ellis',
+    role: 'Full Stack Developer',
+    title: 'Full Stack Developer',
+    image: '/team/ellis.jpg',
+    fallbackGradient: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)',
+    bio: 'Based in Colombia with over 3 years of experience building projects for companies in Mexico and USA. Specialized in end-to-end development solutions.',
+    skills: ['React', 'Node.js', 'TypeScript', 'Full Stack', 'API Development', 'Database Design'],
+    icon: Code,
     social: {
       linkedin: '#',
+      github: '#',
+      email: 'eyis619@gmail.com'
+    }
+  },
+  {
+    name: 'Muhammad Adamu Shuaibu',
+    role: 'AI Specialist & Data Scientist',
+    title: 'Machine Learning Engineer & Business Intelligence Analyst',
+    image: '/team/muhammad-adamu-shuaibu.jpg',
+    fallbackGradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+    bio: 'Based in Nigeria with extensive experience in AI, machine learning, and data science. Expert in NLP, computer vision, and business intelligence solutions for data-driven decision making.',
+    skills: ['Machine Learning', 'Python', 'TensorFlow', 'PyTorch', 'SQL', 'Power BI', 'Tableau', 'Data Science', 'NLP', 'Computer Vision'],
+    icon: Database,
+    social: {
+      linkedin: '#',
+      github: '#',
+      email: 'raizadamu@gmail.com'
+    }
+  },
+  {
+    name: 'Ronald Wilson',
+    role: 'Cybersecurity Expert & AI Security Specialist',
+    title: 'Co-founder of Disruptiq | Deepfence AI',
+    image: '/team/ronald-wilson.jpg',
+    fallbackGradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    bio: 'Co-founder of Disruptiq building Deepfence AI - an autonomous AI security agent that thinks like an attacker. Based in Bangalore, India. Pioneering self-evolving security systems that autonomously test, harden, and secure code and infrastructure against real-world threats.',
+    skills: ['Cybersecurity', 'AI Security', 'Agentic AI', 'DevSecOps', 'Threat Detection', 'Autonomous Security', 'Penetration Testing', 'Security Automation'],
+    icon: Shield,
+    social: {
+      linkedin: '#',
+      github: '#',
       email: 'lunor.ko@gmail.com'
     }
   },
@@ -61,34 +221,6 @@ const teamMembers = [
     social: {
       linkedin: '#',
       github: '#',
-      email: 'lunor.ko@gmail.com'
-    }
-  },
-  {
-    name: 'Sai Charan',
-    role: 'Sales Marketer',
-    title: 'Client Relations & Growth',
-    image: null, // Upload later
-    fallbackGradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-    bio: 'Connecting clients with perfect solutions and driving business growth.',
-    skills: ['B2B Sales', 'CRM', 'Client Relations', 'Negotiation', 'Lead Generation'],
-    icon: Users,
-    social: {
-      linkedin: '#',
-      email: 'lunor.ko@gmail.com'
-    }
-  },
-  {
-    name: 'Pragya',
-    role: 'Figma Designer & Social Media Controller',
-    title: 'Design & Brand Specialist',
-    image: null, // Upload later
-    fallbackGradient: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
-    bio: 'Creating stunning designs and managing our social media presence with creativity.',
-    skills: ['Figma', 'UI/UX Design', 'Social Media', 'Brand Identity', 'Content Creation'],
-    icon: Megaphone,
-    social: {
-      linkedin: '#',
       email: 'lunor.ko@gmail.com'
     }
   },
@@ -128,110 +260,14 @@ export default function Team() {
 
         {/* Team Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teamMembers.map((member, index) => {
-            const Icon = member.icon
-            return (
-              <motion.div
+          {teamMembers.map((member, index) => (
+            <TeamMemberCard
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.1 + index * 0.1, duration: 0.6 }}
-                className="group glass-effect p-8 rounded-2xl border border-white/10 hover:border-neon-blue/50 transition-all"
-                whileHover={{ scale: 1.05, y: -10 }}
-              >
-                {/* Avatar */}
-                <div className="relative mb-6">
-                  {member.image ? (
-                    <div 
-                      className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden shadow-lg group-hover:shadow-2xl transition-shadow ring-2 ring-neon-blue/20 group-hover:ring-neon-blue/50 bg-cover bg-center"
-                      style={{ 
-                        backgroundImage: `url(${member.image})`,
-                        backgroundColor: member.fallbackGradient.includes('gradient') ? undefined : member.fallbackGradient
-                      }}
-                      onError={() => {
-                        // Fallback handled by background gradient
-                      }}
-                    >
-                      {/* Image will load as background, fallback is gradient */}
-                    </div>
-                  ) : (
-                    <div
-                      className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl font-bold text-white shadow-lg group-hover:shadow-2xl transition-shadow"
-                      style={{ background: member.fallbackGradient }}
-                    >
-                      {member.name.split(' ').map((n: string) => n[0]).join('')}
-                    </div>
-                  )}
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                    <div className="w-12 h-12 bg-gradient-to-br from-neon-blue to-neon-purple rounded-full flex items-center justify-center border-4 border-dark-bg">
-                      <Icon className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Info */}
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold mb-2 text-white group-hover:text-gradient transition-all">
-                    {member.name}
-                  </h3>
-                  <p className="text-neon-cyan font-semibold mb-1">{member.role}</p>
-                  <p className="text-sm text-gray-400">{member.title}</p>
-                </div>
-
-                {/* Bio */}
-                <p className="text-gray-400 text-sm mb-6 text-center leading-relaxed">
-                  {member.bio}
-                </p>
-
-                {/* Skills */}
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-500 mb-3 uppercase">Skills</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {member.skills.map((skill, idx) => (
-                      <span
-                        key={idx}
-                        className="px-3 py-1 bg-white/5 border border-white/10 text-xs text-gray-300 rounded-full"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Social Links */}
-                <div className="flex justify-center gap-4">
-                  {member.social.linkedin && (
-                    <motion.a
-                      href={member.social.linkedin}
-                      className="w-10 h-10 glass-effect rounded-lg flex items-center justify-center border border-white/10 hover:border-neon-blue/50 transition-all"
-                      whileHover={{ scale: 1.1, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Linkedin className="w-5 h-5 text-gray-400 hover:text-neon-blue transition-colors" />
-                    </motion.a>
-                  )}
-                  {member.social.github && (
-                    <motion.a
-                      href={member.social.github}
-                      className="w-10 h-10 glass-effect rounded-lg flex items-center justify-center border border-white/10 hover:border-neon-blue/50 transition-all"
-                      whileHover={{ scale: 1.1, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Github className="w-5 h-5 text-gray-400 hover:text-neon-blue transition-colors" />
-                    </motion.a>
-                  )}
-                  <motion.a
-                    href={`mailto:${member.social.email}`}
-                    className="w-10 h-10 glass-effect rounded-lg flex items-center justify-center border border-white/10 hover:border-neon-blue/50 transition-all"
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Mail className="w-5 h-5 text-gray-400 hover:text-neon-blue transition-colors" />
-                  </motion.a>
-                </div>
-              </motion.div>
-            )
-          })}
+              member={member}
+              index={index}
+              isInView={isInView}
+            />
+          ))}
         </div>
 
         {/* CTA */}

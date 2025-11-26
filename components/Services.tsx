@@ -2,7 +2,7 @@
 
 import { motion, useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
-import { Code, Smartphone, Brain, GraduationCap, Factory, Briefcase, X } from 'lucide-react'
+import { Code, Smartphone, Brain, GraduationCap, Factory, Briefcase, FolderKanban, X } from 'lucide-react'
 
 const services = [
   {
@@ -52,6 +52,14 @@ const services = [
     fullDesc: 'Streamline your workflows with custom automation solutions. From business process automation to custom integrations, we build tools that save time and increase efficiency.',
     features: ['Workflow Automation', 'API Integrations', 'Custom Tools', 'Scalable Solutions'],
     gradient: 'from-indigo-500 to-purple-500',
+  },
+  {
+    icon: FolderKanban,
+    title: 'Software Projects',
+    shortDesc: 'End-to-end software development from concept to deployment.',
+    fullDesc: 'We deliver complete software projects tailored to your business needs. From enterprise applications to custom software solutions, we handle the entire development lifecycle with expertise and precision.',
+    features: ['Full-Stack Development', 'Project Management', 'Quality Assurance', 'Deployment & Maintenance'],
+    gradient: 'from-teal-500 to-cyan-500',
   },
 ]
 
